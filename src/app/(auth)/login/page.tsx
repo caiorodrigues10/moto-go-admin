@@ -1,57 +1,12 @@
 "use client";
-import { TextInput } from "@/components/TextInput";
-import { Button, Divider, Input, Link } from "@nextui-org/react";
-import { Eye, EyeOff } from "lucide-react";
+import FormLogin from "@/components/page/auth/login/FormLogin";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 export default function LoginPage() {
-  const [isVisible, setIsVisible] = useState(false);
-
-  const toggleVisibility = () => setIsVisible(!isVisible);
-
-  const {push} = useRouter()
-
   return (
     <div className="w-full flex h-full h-min-screen">
       <div className="w-1/2 h-full p-8 justify-center min-h-screen flex items-center flex-col">
-        <form className="flex flex-col gap-4 max-w-[500px] w-full">
-          <div className="flex gap-2 mb-6">
-            <div className="w-1.5 rounded-md h-10 bg-[#FFE924]" />
-            <h1 className="text-3xl font-semibold">Login</h1>
-          </div>
-          <TextInput type="email" label="Email" />
-          <TextInput
-            label="Senha"
-            endContent={
-              <button
-                className="focus:outline-none"
-                type="button"
-                onClick={toggleVisibility}
-                aria-label="toggle password visibility"
-              >
-                {isVisible ? (
-                  <Eye
-                    className="text-default-400 pointer-events-none"
-                    size={18}
-                  />
-                ) : (
-                  <EyeOff
-                    className="text-default-400 pointer-events-none"
-                    size={18}
-                  />
-                )}
-              </button>
-            }
-            type={isVisible ? "text" : "password"}
-          />
-          <Link href="" className="w-fit text-xs">
-            Esqueceu a senha?
-          </Link>
-
-          <Button color="primary" onClick={()=> push('/adminUsers')}>Entrar</Button>
-        </form>
+        <FormLogin />
       </div>
       <div className="w-2/3 h-full min-h-screen bg-[#13161c] flex items-center relative">
         <Image

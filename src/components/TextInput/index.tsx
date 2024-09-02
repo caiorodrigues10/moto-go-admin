@@ -4,7 +4,7 @@ export function TextInput({ ...rest }: InputProps) {
   const styles = {
     label: "!text-white text-sm",
     input: [
-      "bg-transparent",
+      "!bg-transparent",
       "!text-white/90 text-sm",
       "placeholder:text-zinc-500 dark:placeholder:text-white/60",
     ],
@@ -14,9 +14,10 @@ export function TextInput({ ...rest }: InputProps) {
       "border-2",
       "border-[#606369]",
       "!cursor-text",
+      "group-data-[focus=true]:!bg-transparent group-data-[hover=true]:!bg-transparent",
     ],
     clearButton: "text-red-400",
   };
 
-  return <Input {...rest} classNames={{ ...styles }} />;
+  return <Input classNames={{ ...styles }} {...rest} />;
 }
