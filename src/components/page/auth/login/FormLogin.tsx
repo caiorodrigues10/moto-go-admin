@@ -1,3 +1,4 @@
+"use client";
 import { TextInput } from "@/components/TextInput";
 import { Button } from "@nextui-org/react";
 import { Eye, EyeOff } from "lucide-react";
@@ -36,9 +37,10 @@ export default function FormLogin() {
         });
         setCookies({
           userCookies: {
-            name: response.data?.user.name,
             token: response.data?.token,
+            name: response.data?.user.name,
             userName: response.data?.user.userName,
+            id: String(response.data?.user.id),
           },
         });
         push("/adminUsers");
@@ -111,9 +113,6 @@ export default function FormLogin() {
           );
         }}
       />
-      <Link href="" className="w-fit text-xs">
-        Esqueceu a senha?
-      </Link>
 
       <Button type="submit" color="primary" radius="full">
         Entrar

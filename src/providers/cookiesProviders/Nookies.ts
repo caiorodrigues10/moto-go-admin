@@ -1,6 +1,11 @@
 import { NextApiResponse } from "next";
 import { destroyCookie, parseCookies, setCookie } from "nookies";
-import { ICookieProvider, ICookies, UserCookies } from "./interface";
+import {
+  ICookieProvider,
+  ICookies,
+  IDataCookie,
+  UserCookies,
+} from "./interface";
 
 export function nookiesProvider(): ICookieProvider {
   const defaultMaxAge = 60 * 60 * 24; // 24 hour
@@ -12,7 +17,7 @@ export function nookiesProvider(): ICookieProvider {
     destroyCookie({ res: params?.res }, "motogo.name", {
       path: params?.path || "/",
     });
-    destroyCookie({ res: params?.res }, "motogo.telephone", {
+    destroyCookie({ res: params?.res }, "motogo.id", {
       path: params?.path || "/",
     });
     destroyCookie({ res: params?.res }, "motogo.userName", {
@@ -25,17 +30,32 @@ export function nookiesProvider(): ICookieProvider {
       "motogo.token": token,
       "motogo.name": name,
       "motogo.userName": userName,
+      "motogo.id": id,
     } = parseCookies(res);
 
     return {
       token,
       name,
       userName,
+      id,
     };
   }
 
+  function setDataCookie({
+    cookies,
+    res,
+  }: {
+    cookies: IDataCookie;
+    res?: NextApiResponse | undefined;
+  }): void {
+    setCookie({ res }, cookies.path, cookies.value, {
+      maxAge: defaultMaxAge,
+      path: "/",
+    });
+  }
+
   function setCookies({
-    userCookies: { name, token, userName },
+    userCookies: { name, token, userName, id },
     res,
   }: {
     res?: NextApiResponse | undefined;
@@ -50,6 +70,10 @@ export function nookiesProvider(): ICookieProvider {
       path: "/",
     });
     setCookie({ res }, "motogo.name", name || "", {
+      maxAge: defaultMaxAge,
+      path: "/",
+    });
+    setCookie({ res }, "motogo.id", id || "", {
       maxAge: defaultMaxAge,
       path: "/",
     });
@@ -75,5 +99,6 @@ export function nookiesProvider(): ICookieProvider {
     resetCookies,
     setArrayCookies,
     setCookies,
+    setDataCookie,
   };
 }

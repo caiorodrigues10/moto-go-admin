@@ -4,17 +4,17 @@ import {
   ICreateUserAdminResponse,
   IUpdateUserAdmin,
   IUpdateUserAdminResponse,
+  IUserAdminByIdResponse,
 } from "../types";
 import api from "@/services/api";
 import { AppResponse } from "@/services/AppResponse";
 
 export async function updateUserAdmin(
-  data: IUpdateUserAdmin,
-  id: number
+  data: IUpdateUserAdmin
 ): Promise<IUpdateUserAdminResponse> {
   const { getCookies } = PROVIDERS.cookies();
   const { token } = getCookies();
-  const response = await fetch(`${api}/admin/${id}`, {
+  const response = await fetch(`${api}/admin/profile`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -54,7 +54,7 @@ export async function inactiveUserAdmin(id: number): Promise<AppResponse> {
   const { getCookies } = PROVIDERS.cookies();
   const { token } = getCookies();
 
-  const response = await fetch(`${api}/users/${id}`, {
+  const response = await fetch(`${api}/admin/${id}`, {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -66,27 +66,24 @@ export async function inactiveUserAdmin(id: number): Promise<AppResponse> {
   return inactiveUser;
 }
 
-// export async function reactiveUser(
-//   data: IReactiveUser,
-//   id: number
-// ): Promise<IUserCreateAndEditResponse> {
-//   const { getCookies } = PROVIDERS.cookies();
-//   const { token } = getCookies();
-//   const response = await fetch(`${api}/v1/dashboard/users/${id}`, {
-//     method: "PUT",
-//     headers: {
-//       "Content-Type": "application/json",
-//       Authorization: `Bearer ${token}`,
-//     },
-//     body: JSON.stringify({ ...data, id: undefined }),
-//   })
-//     .then((res) => res)
-//     .catch((err) => err.response);
+export async function reactiveUserAdmin(
+  id: number
+): Promise<IUserAdminByIdResponse> {
+  const { getCookies } = PROVIDERS.cookies();
+  const { token } = getCookies();
+  const response = await fetch(`${api}/admin/${id}`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((res) => res)
+    .catch((err) => err.response);
 
-//   const user = await response.json();
+  const user = await response.json();
 
-//   return user;
-// }
+  return user;
+}
 
 // export async function updatePassword(
 //   data: IUpdatePassword

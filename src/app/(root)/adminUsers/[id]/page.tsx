@@ -13,8 +13,6 @@ export default async function AdminByIdPage({
     pathname: "admin/" + params.id,
   });
 
-  console.log(userAdmin);
-
   if (!userAdmin) {
     redirect("/adminUsers");
   }

@@ -20,6 +20,11 @@ interface IUpdateUserAdmin {
   name: string;
 }
 
+interface IUserAdminResponse extends AppResponse {
+  count: number;
+  list: IUserAdmin[];
+}
+
 interface IUserAdminByIdResponse extends AppResponse {
   data?: IUserAdmin;
 }
@@ -38,4 +43,5 @@ export type {
   IUpdateUserAdmin,
   ICreateUserAdminResponse,
   IUpdateUserAdminResponse,
+  IUserAdminResponse,
 };

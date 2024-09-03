@@ -22,7 +22,7 @@ import { ClientOnly } from "../ClientOnly";
 export function NavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { resetCookies, getCookies } = PROVIDERS.cookies();
-  const { userName, name } = getCookies();
+  const { userName, name, id } = getCookies();
   const { push } = useRouter();
 
   function LogOut() {
@@ -32,8 +32,8 @@ export function NavBar() {
 
   const menuItems = [
     { name: "Administradores", link: "/adminUsers", action: () => {} },
-    { name: "Motoristas", link: "/driver", action: () => {} },
-    { name: "Serviços", link: "/services", action: () => {} },
+    // { name: "Motoristas", link: "/driver", action: () => {} },
+    // { name: "Serviços", link: "/services", action: () => {} },
     { name: "Sair", link: "/login", action: () => LogOut() },
   ] as {
     name: string;
@@ -86,13 +86,13 @@ export function NavBar() {
       <NavbarContent justify="end">
         <NavbarItem className="hidden lg:flex">
           <Popover placement="bottom" showArrow={true}>
-            <PopoverTrigger>
-              <ClientOnly>
+            <ClientOnly>
+              <PopoverTrigger>
                 <button className="flex justify-center items-center h-10 w-10 border-2 text-xs border-white rounded-full uppercase pt-1">
                   {userName?.slice(0, 3)}
                 </button>
-              </ClientOnly>
-            </PopoverTrigger>
+              </PopoverTrigger>
+            </ClientOnly>
             <PopoverContent className="bg-[#1e2530]">
               <div className="px-1 py-2 flex flex-col gap-4">
                 <div className="flex border border-zinc-300 rounded-md p-2 pr-6 gap-4">
@@ -104,7 +104,16 @@ export function NavBar() {
                     <p>{name}</p>
                   </div>
                 </div>
-
+                <Button
+                  color="primary"
+                  size="sm"
+                  className="w-full"
+                  radius="full"
+                  variant="flat"
+                  onClick={() => push("/adminUsers/" + id)}
+                >
+                  Editar perfil
+                </Button>
                 <Button
                   color="danger"
                   size="sm"

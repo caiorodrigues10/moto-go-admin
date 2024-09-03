@@ -18,10 +18,14 @@ import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { editAdminSchema, FormEditAdminProps } from "./types";
+import { PROVIDERS } from "@/providers";
+import { useRevalidatePath } from "@/utils/revalidate";
 
 export function FormEditUserAdmin({ user }: { user: IUserAdmin }) {
   const { addToast, removeToast } = useToast();
   const { push } = useRouter();
+  const { setDataCookie } = PROVIDERS.cookies();
+  const { refresh } = useRevalidatePath("/adminUsers");
 
   const { handleSubmit, setValue, control } = useForm<FormEditAdminProps>({
     resolver: zodResolver(editAdminSchema),
@@ -34,7 +38,7 @@ export function FormEditUserAdmin({ user }: { user: IUserAdmin }) {
 
   const onSubmit = useCallback(
     async (data: FormEditAdminProps) => {
-      const response = await updateUserAdmin({ name: data.name }, user.id);
+      const response = await updateUserAdmin({ name: data.name });
 
       if (response.result === "success") {
         addToast({
@@ -42,6 +46,13 @@ export function FormEditUserAdmin({ user }: { user: IUserAdmin }) {
           message: response.message,
           onClose: removeToast,
         });
+        setDataCookie({
+          cookies: {
+            path: "motogo.name",
+            value: data.name,
+          },
+        });
+        refresh();
 
         push("/adminUsers");
       } else {
@@ -58,7 +69,7 @@ export function FormEditUserAdmin({ user }: { user: IUserAdmin }) {
   return (
     <Card className="bg-[#2B3544] w-full max-w-7xl p-6">
       <CardHeader>
-        <h1 className="text-2xl font-medium">Editando - {user.name}</h1>
+        <h1 className="text-xl font-medium">Editando - {user.name}</h1>
       </CardHeader>
       <form onSubmit={handleSubmit(onSubmit)}>
         <CardBody className="flex flex-col gap-4">

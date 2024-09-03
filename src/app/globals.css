@@ -37,3 +37,7 @@ body {
   min-height: 100vh;
   background: #1C2129;
 }
+
+.link {
+  @apply text-white hover:text-sky-500 hover:underline duration-200 text-sm;
+}

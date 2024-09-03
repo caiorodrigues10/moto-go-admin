@@ -1,12 +1,18 @@
-"use client";
+import Continue from "@/components/page/auth/login/Continue";
 import FormLogin from "@/components/page/auth/login/FormLogin";
+import { isValidAuth } from "@/utils/isValidAuth";
+import { cookies } from "next/headers";
 import Image from "next/image";
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  const token = cookies().get("motogo.token")?.value;
+  const name = cookies().get("motogo.name")?.value;
+  const isValid = await isValidAuth(token || "");
+
   return (
     <div className="w-full flex h-full h-min-screen">
       <div className="w-1/2 h-full p-8 justify-center min-h-screen flex items-center flex-col">
-        <FormLogin />
+        {isValid ? <Continue name={name || ""} /> : <FormLogin />}
       </div>
       <div className="w-2/3 h-full min-h-screen bg-[#13161c] flex items-center relative">
         <Image

@@ -1,10 +1,11 @@
 "use client";
-import { IUserAdmin } from "@/services/usersAdmin/types";
+import { EmptyDataTable } from "@/components/EmptyDataTable";
+import { Pagination } from "@/components/Pagination";
+import { IUserAdminResponse } from "@/services/usersAdmin/types";
 import { phoneMask } from "@/utils/MaskProvider";
 import {
   Button,
   Chip,
-  Pagination,
   Table,
   TableBody,
   TableCell,
@@ -12,14 +13,25 @@ import {
   TableHeader,
   TableRow,
   Tooltip,
-  User,
 } from "@nextui-org/react";
-import { Eye, Pencil, Plus, Trash2 } from "lucide-react";
-import Link from "next/link";
+import { Plus, UserCheck, UserMinus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useCallback, useMemo } from "react";
+import InactiveUserAdmin from "./InactiveUserAdmin";
+import ReactiveUserAdmin from "./ReactiveUserAdmin";
 
-export function TableUserAdmin({ users }: { users: IUserAdmin[] }) {
+export function TableUserAdmin({
+  users,
+  searchParams,
+}: {
+  users: IUserAdminResponse;
+  searchParams: {
+    limit?: number;
+    page?: number;
+  };
+}) {
+  const { push } = useRouter();
+
   const columns = useMemo(
     () => [
       { name: "NOME", uid: "name" },
@@ -31,12 +43,8 @@ export function TableUserAdmin({ users }: { users: IUserAdmin[] }) {
     []
   );
 
-  const { push } = useRouter();
-
   const renderCell = useCallback((user: any, columnKey: any) => {
     const cellValue = user[columnKey];
-
-    console.log(cellValue);
 
     switch (columnKey) {
       case "telephone":
@@ -53,7 +61,7 @@ export function TableUserAdmin({ users }: { users: IUserAdmin[] }) {
             className="capitalize"
             color={cellValue ? "success" : "danger"}
             size="sm"
-            variant="flat"
+            variant="solid"
           >
             {cellValue ? "Ativo" : "Inativo"}
           </Chip>
@@ -61,19 +69,23 @@ export function TableUserAdmin({ users }: { users: IUserAdmin[] }) {
       case "actions":
         return (
           <div className="relative flex items-center justify-center gap-2">
-            <Tooltip content="Editar usuário">
-              <Link
-                href={"/adminUsers/" + user?.id}
-                className="text-lg text-zinc-300 cursor-pointer active:opacity-50"
-              >
-                <Pencil />
-              </Link>
-            </Tooltip>
-            <Tooltip color="danger" content="Deletar usuário">
-              <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                <Trash2 />
-              </span>
-            </Tooltip>
+            {user.active ? (
+              <InactiveUserAdmin user={user}>
+                <Tooltip color="danger" content="Inativar usuário">
+                  <span className="text-lg text-danger cursor-pointer active:opacity-50">
+                    <UserMinus />
+                  </span>
+                </Tooltip>
+              </InactiveUserAdmin>
+            ) : (
+              <ReactiveUserAdmin user={user}>
+                <Tooltip color="success" content="Reativar usuário">
+                  <span className="text-lg text-green-500 active:opacity-50 cursor-pointer">
+                    <UserCheck />
+                  </span>
+                </Tooltip>
+              </ReactiveUserAdmin>
+            )}
           </div>
         );
       default:
@@ -85,17 +97,28 @@ export function TableUserAdmin({ users }: { users: IUserAdmin[] }) {
     () => ({
       th: ["bg-[#151C27]"],
       tr: ["data-[odd=true]:bg-[#425269]"],
-      wrapper: ["bg-[#2B3544]", "w-full p-6"],
+      wrapper: ["bg-[#2B3544]", "w-full p-6 min-h-[400px] justify-start"],
       base: "max-w-7xl",
     }),
     []
+  );
+
+  const bottomContent = useMemo(
+    () => (
+      <Pagination
+        total={users?.count || 0}
+        limit={searchParams?.limit || 15}
+        page={searchParams?.page || 0}
+      />
+    ),
+    [users, searchParams]
   );
 
   const topContent = useMemo(() => {
     return (
       <div className="flex justify-between w-full max-w-7xl items-center">
         <div className="flex flex-col">
-          <h2 className="text-2xl font-medium">Usuários Administradores</h2>
+          <h2 className="text-xl font-medium">Usuários Administradores</h2>
           <h5 className="text-default-500">
             Todos os usuários administradores cadastrados na plataforma
           </h5>
@@ -113,29 +136,9 @@ export function TableUserAdmin({ users }: { users: IUserAdmin[] }) {
     );
   }, []);
 
-  const bottomContent = useMemo(() => {
-    return (
-      <div className="py-2 px-2 flex justify-end items-center">
-        <Pagination
-          showControls
-          color="primary"
-          page={1}
-          total={10}
-          variant="flat"
-          classNames={{
-            item: ["bg-[#232D3C]", "data-[hover=true]:!bg-[#161c26]"],
-            prev: ["bg-[#232D3C]", "data-[hover=true]:!bg-[#161c26]"],
-            next: ["bg-[#232D3C]", "data-[hover=true]:!bg-[#161c26]"],
-          }}
-        />
-      </div>
-    );
-  }, []);
-
   return (
     <Table
       isStriped
-      aria-label="Example table with custom cells"
       classNames={classNames}
       topContent={topContent}
       bottomContent={bottomContent}
@@ -150,14 +153,12 @@ export function TableUserAdmin({ users }: { users: IUserAdmin[] }) {
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody items={users}>
+      <TableBody items={users?.list} emptyContent={<EmptyDataTable />}>
         {(item) => (
           <TableRow key={item.id}>
-            {(columnKey) => {
-              console.log(item);
-
-              return <TableCell>{renderCell(item, columnKey)}</TableCell>;
-            }}
+            {(columnKey) => (
+              <TableCell>{renderCell(item, columnKey)}</TableCell>
+            )}
           </TableRow>
         )}
       </TableBody>

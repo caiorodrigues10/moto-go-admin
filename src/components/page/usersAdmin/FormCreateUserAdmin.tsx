@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { createAdminSchema, FormCreateAdminProps } from "./types";
+import { useRevalidatePath } from "@/utils/revalidate";
 
 export function FormCreateUserAdmin() {
   const [isVisible, setIsVisible] = useState(false);
@@ -29,6 +30,7 @@ export function FormCreateUserAdmin() {
     resolver: zodResolver(createAdminSchema),
   });
   const { push } = useRouter();
+  const { refresh } = useRevalidatePath("/adminUsers");
 
   const onSubmit = useCallback(
     async (data: FormCreateAdminProps) => {
@@ -40,7 +42,7 @@ export function FormCreateUserAdmin() {
           message: response.message,
           onClose: removeToast,
         });
-
+        refresh();
         push("/adminUsers");
       } else {
         addToast({
@@ -50,7 +52,7 @@ export function FormCreateUserAdmin() {
         });
       }
     },
-    [addToast, push, removeToast]
+    [addToast, push, removeToast, refresh]
   );
 
   return (
