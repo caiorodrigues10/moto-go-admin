@@ -1,13 +1,16 @@
 import { AppResponse } from "@/services/AppResponse";
 
 interface IUser {
-  cpf: string;
-  email: string;
   id: number;
-  name: string;
-  telephone: string;
-  active: boolean;
-  createdAt: string;
+	name: string;
+	telephone: string;
+	created_at: Date;
+	active: boolean;
+	blocked: boolean;
+	fcm_token: string | null;
+	validated: boolean;
+	lat: number;
+	long: number;
 }
 
 interface ICreateUser {
@@ -23,6 +26,11 @@ interface IUpdateUser {
   cpf: string;
   name: string;
   telephone?: string;
+}
+
+interface IUserResponse extends AppResponse {
+  list: IUser[]
+  count: number
 }
 
 interface IUserByIdResponse extends AppResponse {
@@ -43,4 +51,5 @@ export type {
   IUpdateUser,
   ICreateUserResponse,
   IUpdateUserResponse,
+  IUserResponse
 };

@@ -15,7 +15,7 @@ export default async function middleware(request: NextRequest) {
         response.cookies.set(`motogo.${cookieName}`, "", {
           expires: new Date(0),
           path: "/",
-        });
+        });3
       });
 
       return response;

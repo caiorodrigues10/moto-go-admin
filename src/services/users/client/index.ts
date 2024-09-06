@@ -66,8 +66,7 @@ export async function inactiveUser(id: number): Promise<AppResponse> {
   return inactiveUser;
 }
 
-// export async function reactiveUser(
-//   data: IReactiveUser,
+// export async function unlockUser(
 //   id: number
 // ): Promise<IUserCreateAndEditResponse> {
 //   const { getCookies } = PROVIDERS.cookies();
