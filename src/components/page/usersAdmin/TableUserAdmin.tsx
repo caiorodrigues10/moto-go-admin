@@ -130,7 +130,7 @@ export function TableUserAdmin({
           endContent={<Plus size={16} />}
           onClick={() => push("/adminUsers/new")}
         >
-          Novo usuário
+          Novo administrador
         </Button>
       </div>
     );

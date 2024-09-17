@@ -78,7 +78,7 @@ export function NavBar() {
             return (
               <NavbarItem key={i}>
                 <Link
-                  color={e.link.includes(path) ? "primary" : "foreground"}
+                  color={path.startsWith(e.link) ? "primary" : "foreground"}
                   href={e.link}
                 >
                   {e.name}

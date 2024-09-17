@@ -160,15 +160,6 @@ export function TableUser({
             Todos os usuários cadastrados na plataforma
           </h5>
         </div>
-        <Button
-          color="primary"
-          variant="bordered"
-          className="rounded-full"
-          endContent={<Plus size={16} />}
-          onClick={() => push("/adminUsers/new")}
-        >
-          Novo usuário
-        </Button>
       </div>
     );
   }, []);
