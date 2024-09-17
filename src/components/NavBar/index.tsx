@@ -15,7 +15,7 @@ import {
   PopoverTrigger,
 } from "@nextui-org/react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { ClientOnly } from "../ClientOnly";
 
@@ -24,6 +24,7 @@ export function NavBar() {
   const { resetCookies, getCookies } = PROVIDERS.cookies();
   const { userName, name, id } = getCookies();
   const { push } = useRouter();
+  const path = usePathname();
 
   function LogOut() {
     resetCookies();
@@ -76,7 +77,10 @@ export function NavBar() {
           .map((e, i) => {
             return (
               <NavbarItem key={i}>
-                <Link color="primary" href={e.link}>
+                <Link
+                  color={e.link.includes(path) ? "primary" : "foreground"}
+                  href={e.link}
+                >
                   {e.name}
                 </Link>
               </NavbarItem>
@@ -87,9 +91,13 @@ export function NavBar() {
       <NavbarContent justify="end">
         <NavbarItem className="hidden lg:flex">
           <Popover placement="bottom" showArrow={true}>
-            <ClientOnly>
+            <ClientOnly
+              fallback={
+                <div className="animate-pulse bg-[#4f6282] rounded-full h-10 w-10" />
+              }
+            >
               <PopoverTrigger>
-                <button className="flex justify-center items-center h-10 w-10 border-2 text-xs border-white rounded-full uppercase pt-1">
+                <button className="flex justify-center items-center h-10 w-10 border-2 text-xs border-white rounded-full uppercase pt-0.5">
                   {userName?.slice(0, 3)}
                 </button>
               </PopoverTrigger>
@@ -97,7 +105,7 @@ export function NavBar() {
             <PopoverContent className="bg-[#1e2530]">
               <div className="px-1 py-2 flex flex-col gap-4">
                 <div className="flex border border-zinc-300 rounded-md p-2 pr-6 gap-4">
-                  <div className="flex justify-center items-center h-10 w-10 border-2 text-xs border-white rounded-full uppercase pt-1">
+                  <div className="flex justify-center items-center h-10 w-10 border-2 text-xs border-white rounded-full uppercase pt-0.5">
                     {userName?.slice(0, 3)}
                   </div>
                   <div className="flex flex-col">

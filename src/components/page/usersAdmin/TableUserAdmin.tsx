@@ -153,7 +153,7 @@ export function TableUserAdmin({
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody items={users?.list} emptyContent={<EmptyDataTable />}>
+      <TableBody items={users?.list || []} emptyContent={<EmptyDataTable />}>
         {(item) => (
           <TableRow key={item.id}>
             {(columnKey) => (

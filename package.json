@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@brazilian-utils/brazilian-utils": "^1.0.0-rc.12",
     "@hookform/resolvers": "^3.9.0",
     "@nextui-org/react": "^2.4.6",
     "@types/uuid": "^10.0.0",

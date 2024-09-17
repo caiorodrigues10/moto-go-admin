@@ -18,12 +18,9 @@ export default async function DriverPage({
     ],
   });
 
-  console.log(drivers);
-  
-
   return (
     <TableDrivers
-    drivers={drivers?.data || {} as IDriverResponse}
+      drivers={drivers?.data || ({} as IDriverResponse)}
       searchParams={searchParams}
     />
   );

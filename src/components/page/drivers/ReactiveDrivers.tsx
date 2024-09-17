@@ -1,9 +1,7 @@
 import { useToast } from "@/context/ToastContext";
-import {
-  inactiveUserAdmin,
-  reactiveUserAdmin,
-} from "@/services/usersAdmin/client";
-import { IUserAdmin } from "@/services/usersAdmin/types";
+import { reactiveDriver } from "@/services/drivers/client";
+import { IDriver } from "@/services/drivers/types";
+import { reactiveUserAdmin } from "@/services/usersAdmin/client";
 import { useRevalidatePath } from "@/utils/revalidate";
 import {
   Button,
@@ -17,12 +15,12 @@ import {
 import { useRouter } from "next/navigation";
 import { ReactNode, useCallback, useState } from "react";
 
-export default function ReactiveUser({
+export default function ReactiveDriver({
   children,
-  user,
+  driver,
 }: {
   children: ReactNode;
-  user: IUserAdmin;
+  driver: IDriver;
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { addToast, removeToast } = useToast();
@@ -36,12 +34,14 @@ export default function ReactiveUser({
 
   const onSubmit = useCallback(async () => {
     setIsLoading(true);
-    const response = await reactiveUserAdmin(user.id);
+    const response = await reactiveDriver(driver.id);
 
     if (response?.result === "success") {
       addToast({
         type: "success",
-        message: response?.message || "Serviço indisponível tente novamente mais tarde",
+        message:
+          response?.message ||
+          "Serviço indisponível tente novamente mais tarde",
         onClose: removeToast,
       });
       refresh();
@@ -49,12 +49,14 @@ export default function ReactiveUser({
     } else {
       addToast({
         type: "error",
-        message: response?.message || "Serviço indisponível tente novamente mais tarde",
+        message:
+          response?.message ||
+          "Serviço indisponível tente novamente mais tarde",
         onClose: removeToast,
       });
     }
     setIsLoading(false);
-  }, [addToast, push, removeToast, user, refresh, onClose]);
+  }, [addToast, push, removeToast, driver, refresh, onClose]);
 
   return (
     <>
@@ -62,10 +64,10 @@ export default function ReactiveUser({
       <Modal backdrop={"blur"} isOpen={isOpen} onClose={onClose}>
         <ModalContent>
           <ModalHeader className="flex flex-col gap-1">
-            Reativar - {user.name}
+            Reativar - {driver?.name}
           </ModalHeader>
           <ModalBody>
-            <p>Deseja realmente reativar este usuário?</p>
+            <p>Deseja realmente reativar este motorista?</p>
           </ModalBody>
           <ModalFooter>
             <Button color="default" variant="light" onPress={onClose}>

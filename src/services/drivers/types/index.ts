@@ -31,7 +31,13 @@ interface IDriverById extends AppResponse {
 }
 
 interface ICreateDriverResponse extends AppResponse {
-  data?: IDriver
+  data?: IDriver;
 }
 
-export type { IDriverResponse, ICreateDriver, ICreateDriverResponse, IDriverById };
+export type {
+  IDriverResponse,
+  ICreateDriver,
+  ICreateDriverResponse,
+  IDriverById,
+  IDriver,
+};

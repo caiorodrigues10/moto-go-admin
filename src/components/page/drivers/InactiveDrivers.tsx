@@ -1,6 +1,6 @@
 import { useToast } from "@/context/ToastContext";
-import { inactiveUserAdmin } from "@/services/usersAdmin/client";
-import { IUserAdmin } from "@/services/usersAdmin/types";
+import { inactiveDriver } from "@/services/drivers/client";
+import { IDriver } from "@/services/drivers/types";
 import { useRevalidatePath } from "@/utils/revalidate";
 import {
   Button,
@@ -14,17 +14,17 @@ import {
 import { useRouter } from "next/navigation";
 import { ReactNode, useCallback, useState } from "react";
 
-export default function InactiveUser({
+export default function InactiveDriver({
   children,
-  user,
+  driver,
 }: {
   children: ReactNode;
-  user: IUserAdmin;
+  driver: IDriver;
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { addToast, removeToast } = useToast();
   const { push } = useRouter();
-  const { refresh } = useRevalidatePath("/adminUsers");
+  const { refresh } = useRevalidatePath("/drivers");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleOpen = () => {
@@ -33,12 +33,14 @@ export default function InactiveUser({
 
   const onSubmit = useCallback(async () => {
     setIsLoading(true);
-    const response = await inactiveUserAdmin(user.id);
+    const response = await inactiveDriver(driver.id);
 
     if (response?.result === "success") {
       addToast({
         type: "success",
-        message: response?.message || "Serviço indisponível tente novamente mais tarde",
+        message:
+          response?.message ||
+          "Serviço indisponível tente novamente mais tarde",
         onClose: removeToast,
       });
       refresh();
@@ -46,12 +48,14 @@ export default function InactiveUser({
     } else {
       addToast({
         type: "error",
-        message: response?.message || "Serviço indisponível tente novamente mais tarde",
+        message:
+          response?.message ||
+          "Serviço indisponível tente novamente mais tarde",
         onClose: removeToast,
       });
     }
     setIsLoading(false);
-  }, [addToast, push, removeToast, user, refresh, onClose]);
+  }, [addToast, push, removeToast, driver, refresh, onClose]);
 
   return (
     <>
@@ -59,10 +63,10 @@ export default function InactiveUser({
       <Modal backdrop={"blur"} isOpen={isOpen} onClose={onClose}>
         <ModalContent>
           <ModalHeader className="flex flex-col gap-1">
-            Inativar - {user.name}
+            Inativar - {driver?.name}
           </ModalHeader>
           <ModalBody>
-            <p>Deseja realmente inativar este usuário?</p>
+            <p>Deseja realmente inativar este motorista?</p>
           </ModalBody>
           <ModalFooter>
             <Button color="default" variant="light" onPress={onClose}>

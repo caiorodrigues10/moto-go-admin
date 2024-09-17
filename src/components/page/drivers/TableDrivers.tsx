@@ -2,7 +2,7 @@
 import { EmptyDataTable } from "@/components/EmptyDataTable";
 import { Pagination } from "@/components/Pagination";
 import { IUserAdminResponse } from "@/services/usersAdmin/types";
-import { phoneMask } from "@/utils/MaskProvider";
+import { cpfMask, phoneMask } from "@/utils/MaskProvider";
 import {
   Button,
   Chip,
@@ -13,6 +13,7 @@ import {
   TableHeader,
   TableRow,
   Tooltip,
+  User,
 } from "@nextui-org/react";
 import {
   Plus,
@@ -37,8 +38,6 @@ export function TableDrivers({
     page?: number;
   };
 }) {
-  console.log({drivers});
-  
   const { push } = useRouter();
 
   const columns = useMemo(
@@ -47,22 +46,36 @@ export function TableDrivers({
       { name: "CPF", uid: "document" },
       { name: "TELEFONE", uid: "telephone" },
       { name: "STATUS", uid: "active" },
-      { name: "BLOQUEADO", uid: "blocked" },
       { name: "AÇÕES", uid: "actions" },
     ],
     []
   );
 
-  const renderCell = useCallback((user: any, columnKey: any) => {
-    const cellValue = user[columnKey];
+  const renderCell = useCallback((driver: any, columnKey: any) => {
+    const cellValue = driver[columnKey];
 
     switch (columnKey) {
+      case "name":
+        return (
+          <User
+            avatarProps={{ radius: "lg", src: driver?.profile_picture }}
+            name={cellValue}
+          >
+            {driver.name}
+          </User>
+        );
       case "telephone":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm capitalize">
               {phoneMask(cellValue)}
             </p>
+          </div>
+        );
+      case "document":
+        return (
+          <div className="flex flex-col">
+            <p className="text-bold text-sm capitalize">{cpfMask(cellValue)}</p>
           </div>
         );
       case "active":
@@ -76,31 +89,20 @@ export function TableDrivers({
             {cellValue ? "Ativo" : "Inativo"}
           </Chip>
         );
-      case "blocked":
-        return (
-          <Chip
-            className="capitalize"
-            color={!cellValue ? "success" : "danger"}
-            size="sm"
-            variant="solid"
-          >
-            {cellValue ? "Sim" : "Não"}
-          </Chip>
-        );
       case "actions":
         return (
           <div className="relative flex items-center justify-center gap-2">
-            {user.active ? (
-              <InactiveUser user={user}>
-                <Tooltip color="danger" content="Inativar usuário">
+            {driver.active ? (
+              <InactiveUser driver={driver}>
+                <Tooltip color="danger" content="Inativar motorista">
                   <span className="text-lg text-danger cursor-pointer active:opacity-50">
                     <UserMinus />
                   </span>
                 </Tooltip>
               </InactiveUser>
             ) : (
-              <ReactiveUser user={user}>
-                <Tooltip color="success" content="Reativar usuário">
+              <ReactiveUser driver={driver}>
+                <Tooltip color="success" content="Reativar motorista">
                   <span className="text-lg text-green-500 active:opacity-50 cursor-pointer">
                     <UserCheck />
                   </span>
@@ -139,7 +141,7 @@ export function TableDrivers({
     return (
       <div className="flex justify-between w-full max-w-7xl items-center">
         <div className="flex flex-col">
-          <h2 className="text-xl font-medium">Motoritas</h2>
+          <h2 className="text-xl font-medium">Motoristas</h2>
           <h5 className="text-default-500">
             Todos os motoristas cadastrados na plataforma
           </h5>

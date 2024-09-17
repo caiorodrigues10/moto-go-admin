@@ -42,7 +42,7 @@ export async function inactiveDriver(id: number): Promise<AppResponse> {
 export async function reactiveDriver(id: number): Promise<IDriverById> {
   const { getCookies } = PROVIDERS.cookies();
   const { token } = getCookies();
-  const response = await fetch(`${api}/admin/${id}`, {
+  const response = await fetch(`${api}/drivers/reactive/${id}`, {
     method: "PATCH",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -51,7 +51,7 @@ export async function reactiveDriver(id: number): Promise<IDriverById> {
     .then((res) => res)
     .catch((err) => err.response);
 
-  const user = await response?.json();
+  const driver = await response?.json();
 
-  return user;
+  return driver;
 }
