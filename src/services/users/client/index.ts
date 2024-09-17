@@ -25,7 +25,7 @@ export async function updateUser(
     .then((res) => res)
     .catch((err) => err.response);
 
-  const user = await response.json();
+  const user = await response?.json();
 
   return user;
 }
@@ -82,7 +82,7 @@ export async function inactiveUser(id: number): Promise<AppResponse> {
 //     .then((res) => res)
 //     .catch((err) => err.response);
 
-//   const user = await response.json();
+//   const user = await response?.json();
 
 //   return user;
 // }

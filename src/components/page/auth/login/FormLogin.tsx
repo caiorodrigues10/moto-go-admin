@@ -2,7 +2,6 @@
 import { TextInput } from "@/components/TextInput";
 import { Button } from "@nextui-org/react";
 import { Eye, EyeOff } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -13,6 +12,7 @@ import { useToast } from "@/context/ToastContext";
 import { PROVIDERS } from "@/providers";
 
 export default function FormLogin() {
+  const [isLoading, setIsLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const { addToast, removeToast } = useToast();
   const { setCookies } = PROVIDERS.cookies();
@@ -27,12 +27,13 @@ export default function FormLogin() {
 
   const onSubmit = useCallback(
     async (data: LoginAdminProps) => {
+      setIsLoading(true)
       const response = await login(data);
 
-      if (response.result === "success") {
+      if (response?.result === "success") {
         addToast({
           type: "success",
-          message: response.message,
+          message: response?.message || "Serviço indisponível tente novamente mais tarde",
           onClose: removeToast,
         });
         setCookies({
@@ -47,10 +48,11 @@ export default function FormLogin() {
       } else {
         addToast({
           type: "error",
-          message: response.message,
+          message: response?.message || "Serviço indisponível tente novamente mais tarde",
           onClose: removeToast,
         });
       }
+      setIsLoading(false)
     },
     [addToast, push, removeToast]
   );
@@ -72,6 +74,7 @@ export default function FormLogin() {
             <TextInput
               type="text"
               label="Nome de usuário"
+              placeholder="Digite o nome do seu usuário"
               onChange={onChange}
               isInvalid={!!error?.message}
               errorMessage={error?.message}
@@ -89,6 +92,7 @@ export default function FormLogin() {
               onChange={onChange}
               isInvalid={!!error?.message}
               errorMessage={error?.message}
+              placeholder="Digite sua senha"
               endContent={
                 <button
                   className="focus:outline-none"
@@ -114,7 +118,7 @@ export default function FormLogin() {
         }}
       />
 
-      <Button type="submit" color="primary" radius="full">
+      <Button type="submit" color="primary" radius="full" isLoading={isLoading}>
         Entrar
       </Button>
     </form>

@@ -25,7 +25,7 @@ export async function updateUserAdmin(
     .then((res) => res)
     .catch((err) => err.response);
 
-  const user = await response.json();
+  const user = await response?.json();
 
   return user;
 }
@@ -80,7 +80,7 @@ export async function reactiveUserAdmin(
     .then((res) => res)
     .catch((err) => err.response);
 
-  const user = await response.json();
+  const user = await response?.json();
 
   return user;
 }

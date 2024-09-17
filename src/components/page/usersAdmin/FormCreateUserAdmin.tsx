@@ -36,10 +36,10 @@ export function FormCreateUserAdmin() {
     async (data: FormCreateAdminProps) => {
       const response = await createUserAdmin(data);
 
-      if (response.result === "success") {
+      if (response?.result === "success") {
         addToast({
           type: "success",
-          message: response.message,
+          message: response?.message || "Serviço indisponível tente novamente mais tarde",
           onClose: removeToast,
         });
         refresh();
@@ -47,7 +47,7 @@ export function FormCreateUserAdmin() {
       } else {
         addToast({
           type: "error",
-          message: response.message,
+          message: response?.message || "Serviço indisponível tente novamente mais tarde",
           onClose: removeToast,
         });
       }
@@ -69,6 +69,7 @@ export function FormCreateUserAdmin() {
               return (
                 <TextInput
                   type="text"
+                  placeholder="Digite o nome completo"
                   label="Nome completo"
                   onChange={onChange}
                   isInvalid={!!error?.message}
@@ -85,6 +86,7 @@ export function FormCreateUserAdmin() {
               return (
                 <TextInput
                   type="text"
+                  placeholder="Digite o nome de usuário"
                   label="Nome de usuário"
                   onChange={onChange}
                   isInvalid={!!error?.message}
@@ -101,6 +103,7 @@ export function FormCreateUserAdmin() {
               return (
                 <TextInput
                   type="text"
+                  placeholder="Digite o telefone"
                   label="Telefone"
                   value={value}
                   onChange={(e) => {
@@ -125,6 +128,7 @@ export function FormCreateUserAdmin() {
                   autoComplete="new-password"
                   isInvalid={!!error?.message}
                   errorMessage={error?.message}
+                  placeholder="Digite sua senha"
                   endContent={
                     <button
                       className="focus:outline-none"
@@ -158,6 +162,7 @@ export function FormCreateUserAdmin() {
                 <TextInput
                   label="Confirmar senha"
                   autoComplete="new-password"
+                  placeholder="Confirme sua senha"
                   onChange={onChange}
                   isInvalid={!!error?.message}
                   errorMessage={error?.message}

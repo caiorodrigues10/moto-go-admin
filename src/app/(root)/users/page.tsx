@@ -22,7 +22,7 @@ export default async function UsersPage({
 
   return (
     <TableUser
-      users={users.data || {} as IUserResponse}
+      users={users?.data || {} as IUserResponse}
       searchParams={searchParams}
     />
   );

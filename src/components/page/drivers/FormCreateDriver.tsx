@@ -1,9 +1,11 @@
 "use client";
+import { DropZone } from "@/components/DropZone";
 import { TextInput } from "@/components/TextInput";
 import { useToast } from "@/context/ToastContext";
-import { updateUserAdmin } from "@/services/usersAdmin/client";
-import { IUserAdmin } from "@/services/usersAdmin/types";
-import { phoneMask } from "@/utils/MaskProvider";
+import { createDriver } from "@/services/drivers/client";
+import { ICreateDriver } from "@/services/drivers/types";
+import { cpfMask, phoneMask } from "@/utils/MaskProvider";
+import { useRevalidatePath } from "@/utils/revalidate";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Button,
@@ -12,33 +14,31 @@ import {
   CardFooter,
   CardHeader,
 } from "@nextui-org/react";
-import { ArrowLeft, Save } from "lucide-react";
+import { ArrowLeft, Check } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { editAdminSchema, FormEditAdminProps } from "./types";
-import { PROVIDERS } from "@/providers";
-import { useRevalidatePath } from "@/utils/revalidate";
+import { createDriverSchema, FormCreateDriverProps } from "./types";
 
-export function FormEditUserAdmin({ user }: { user: IUserAdmin }) {
-  const { addToast, removeToast } = useToast();
+export function FormCreateDriver() {
+  const [isLoading, setIsLoading] = useState(false);
+  const { addToast, removeToast} = useToast()
+  const [photo, setPhoto] = useState('')
+
   const { push } = useRouter();
-  const { setDataCookie } = PROVIDERS.cookies();
-  const { refresh } = useRevalidatePath("/adminUsers");
-
-  const { handleSubmit, setValue, control } = useForm<FormEditAdminProps>({
-    resolver: zodResolver(editAdminSchema),
-    defaultValues: {
-      name: user.name,
-      telephone: user.telephone,
-      userName: user.user_name,
-    },
-  });
+  const { refresh } = useRevalidatePath("/drivers");
 
   const onSubmit = useCallback(
-    async (data: FormEditAdminProps) => {
-      const response = await updateUserAdmin({ name: data.name });
+    async (data: FormCreateDriverProps) => {
+      setIsLoading(true)
+      const newData = {
+        ...data,
+        profile_picture: photo?.replace(/^data:.*;base64,/, ""),
+      } as ICreateDriver
+
+
+      const response = await createDriver(newData);
 
       if (response?.result === "success") {
         addToast({
@@ -46,14 +46,7 @@ export function FormEditUserAdmin({ user }: { user: IUserAdmin }) {
           message: response?.message || "Serviço indisponível tente novamente mais tarde",
           onClose: removeToast,
         });
-        setDataCookie({
-          cookies: {
-            path: "motogo.name",
-            value: data.name,
-          },
-        });
         refresh();
-
         push("/adminUsers");
       } else {
         addToast({
@@ -62,27 +55,34 @@ export function FormEditUserAdmin({ user }: { user: IUserAdmin }) {
           onClose: removeToast,
         });
       }
+      setIsLoading(false)
     },
-    [addToast, push, removeToast, user]
+    [addToast, push, removeToast, refresh, photo]
   );
+
+ 
+  const { handleSubmit, setValue, control } = useForm<FormCreateDriverProps>({
+    resolver: zodResolver(createDriverSchema),
+  });
 
   return (
     <Card className="bg-[#2B3544] w-full max-w-7xl p-6">
       <CardHeader>
-        <h1 className="text-xl font-medium">Editando - {user.name}</h1>
+        <h1 className="text-2xl font-medium">Cadastro de usuário admin</h1>
       </CardHeader>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <CardBody className="flex flex-col gap-4">
-          <Controller
+        <CardBody className="flex flex-row gap-24">
+            <DropZone photo={photo} setPhoto={setPhoto} className="!w-fit" />
+            <div className="flex flex-col gap-4 w-full">
+            <Controller
             name="name"
             control={control}
-            render={({ field: { onChange, value }, fieldState: { error } }) => {
+            render={({ field: { onChange }, fieldState: { error } }) => {
               return (
                 <TextInput
                   type="text"
                   placeholder="Digite o nome completo"
                   label="Nome completo"
-                  value={value}
                   onChange={onChange}
                   isInvalid={!!error?.message}
                   errorMessage={error?.message}
@@ -92,17 +92,19 @@ export function FormEditUserAdmin({ user }: { user: IUserAdmin }) {
           />
 
           <Controller
-            name="userName"
+            name="document"
             control={control}
             render={({ field: { value, onChange }, fieldState: { error } }) => {
               return (
                 <TextInput
                   type="text"
-                  isDisabled
-                  placeholder="Digite o nome de usuário"
+                  placeholder="Digite o documento"
+                  label="Documento"
+                  onChange={(e) => {
+                    onChange(e)
+                    setValue('document', cpfMask(e.target.value))
+                  }}
                   value={value}
-                  label="Nome de usuário"
-                  onChange={onChange}
                   isInvalid={!!error?.message}
                   errorMessage={error?.message}
                 />
@@ -117,10 +119,9 @@ export function FormEditUserAdmin({ user }: { user: IUserAdmin }) {
               return (
                 <TextInput
                   type="text"
-                  label="Telefone"
                   placeholder="Digite o telefone"
-                  isDisabled
-                  value={phoneMask(value || "")}
+                  label="Telefone"
+                  value={value}
                   onChange={(e) => {
                     onChange(e);
                     setValue("telephone", phoneMask(e.target.value));
@@ -131,6 +132,7 @@ export function FormEditUserAdmin({ user }: { user: IUserAdmin }) {
               );
             }}
           />
+          </div>
         </CardBody>
         <CardFooter className="pb-4 flex justify-between gap-4">
           <Link href={"/adminUsers"}>
@@ -147,9 +149,10 @@ export function FormEditUserAdmin({ user }: { user: IUserAdmin }) {
             color="primary"
             type="submit"
             radius="full"
-            endContent={<Save size={16} />}
+            endContent={<Check size={16} />}
+            isLoading={isLoading}
           >
-            Salvar
+            Cadastrar
           </Button>
         </CardFooter>
       </form>

@@ -51,5 +51,5 @@ export type {
   IUpdateUser,
   ICreateUserResponse,
   IUpdateUserResponse,
-  IUserResponse
+  IUserResponse,
 };

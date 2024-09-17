@@ -32,7 +32,8 @@ export function NavBar() {
 
   const menuItems = [
     { name: "Administradores", link: "/adminUsers", action: () => {} },
-    // { name: "Motoristas", link: "/driver", action: () => {} },
+    { name: "Usuários", link: "/users", action: () => {} },
+    { name: "Motoristas", link: "/drivers", action: () => {} },
     // { name: "Serviços", link: "/services", action: () => {} },
     { name: "Sair", link: "/login", action: () => LogOut() },
   ] as {

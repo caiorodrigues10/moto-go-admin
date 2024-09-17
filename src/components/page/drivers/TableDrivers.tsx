@@ -23,27 +23,28 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useCallback, useMemo } from "react";
-import InactiveUser from "./InactiveUser";
-import ReactiveUser from "./ReactiveUser";
-import { IUserResponse } from "@/services/users/types";
-import UnlockUser from "./UnlockUser";
-import BlockUser from "./BlockUser";
+import InactiveUser from "./InactiveDrivers";
+import ReactiveUser from "./ReactiveDrivers";
+import { IDriverResponse } from "@/services/drivers/types";
 
-export function TableUser({
-  users,
+export function TableDrivers({
+  drivers,
   searchParams,
 }: {
-  users: IUserResponse;
+  drivers: IDriverResponse;
   searchParams: {
     limit?: number;
     page?: number;
   };
 }) {
+  console.log({drivers});
+  
   const { push } = useRouter();
 
   const columns = useMemo(
     () => [
       { name: "NOME", uid: "name" },
+      { name: "CPF", uid: "document" },
       { name: "TELEFONE", uid: "telephone" },
       { name: "STATUS", uid: "active" },
       { name: "BLOQUEADO", uid: "blocked" },
@@ -106,23 +107,6 @@ export function TableUser({
                 </Tooltip>
               </ReactiveUser>
             )}
-            {!user.blocked ? (
-              <BlockUser user={user}>
-                <Tooltip color="danger" content="Bloquear usuário">
-                  <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                    <UserRoundX />
-                  </span>
-                </Tooltip>
-              </BlockUser>
-            ) : (
-              <UnlockUser user={user}>
-                <Tooltip color="success" content="Desbloquar usuário">
-                  <span className="text-lg text-green-500 active:opacity-50 cursor-pointer">
-                    <UserRoundCheck />
-                  </span>
-                </Tooltip>
-              </UnlockUser>
-            )}
           </div>
         );
       default:
@@ -143,21 +127,21 @@ export function TableUser({
   const bottomContent = useMemo(
     () => (
       <Pagination
-        total={users?.count || 0}
+        total={drivers?.count || 0}
         limit={searchParams?.limit || 15}
         page={searchParams?.page || 0}
       />
     ),
-    [users, searchParams]
+    [drivers, searchParams]
   );
 
   const topContent = useMemo(() => {
     return (
       <div className="flex justify-between w-full max-w-7xl items-center">
         <div className="flex flex-col">
-          <h2 className="text-xl font-medium">Usuários</h2>
+          <h2 className="text-xl font-medium">Motoritas</h2>
           <h5 className="text-default-500">
-            Todos os usuários cadastrados na plataforma
+            Todos os motoristas cadastrados na plataforma
           </h5>
         </div>
         <Button
@@ -165,9 +149,9 @@ export function TableUser({
           variant="bordered"
           className="rounded-full"
           endContent={<Plus size={16} />}
-          onClick={() => push("/adminUsers/new")}
+          onClick={() => push("/drivers/new")}
         >
-          Novo usuário
+          Novo motorista
         </Button>
       </div>
     );
@@ -190,7 +174,7 @@ export function TableUser({
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody items={users?.list} emptyContent={<EmptyDataTable />}>
+      <TableBody items={drivers?.list || []} emptyContent={<EmptyDataTable />}>
         {(item) =>
           item ? (
             <TableRow key={item.id}>

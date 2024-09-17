@@ -38,10 +38,10 @@ export default function ReactiveUserAdmin({
     setIsLoading(true);
     const response = await reactiveUserAdmin(user.id);
 
-    if (response.result === "success") {
+    if (response?.result === "success") {
       addToast({
         type: "success",
-        message: response.message,
+        message: response?.message || "Serviço indisponível tente novamente mais tarde",
         onClose: removeToast,
       });
       refresh();
@@ -49,7 +49,7 @@ export default function ReactiveUserAdmin({
     } else {
       addToast({
         type: "error",
-        message: response.message,
+        message: response?.message || "Serviço indisponível tente novamente mais tarde",
         onClose: removeToast,
       });
     }

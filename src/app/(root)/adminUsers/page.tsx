@@ -20,7 +20,7 @@ export default async function AdminUsersPage({
 
   return (
     <TableUserAdmin
-      users={usersAdmin.data || ({} as IUserAdminResponse)}
+      users={usersAdmin?.data || ({} as IUserAdminResponse)}
       searchParams={searchParams}
     />
   );
