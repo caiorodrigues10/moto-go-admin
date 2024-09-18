@@ -25,7 +25,7 @@ export default function BlockUser({
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { addToast, removeToast } = useToast();
   const { push } = useRouter();
-  const { refresh } = useRevalidatePath("/users");
+  const { refresh } = useRevalidatePath("users");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleOpen = () => {

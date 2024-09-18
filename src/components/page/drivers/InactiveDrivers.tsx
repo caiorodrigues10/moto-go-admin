@@ -24,7 +24,7 @@ export default function InactiveDriver({
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { addToast, removeToast } = useToast();
   const { push } = useRouter();
-  const { refresh } = useRevalidatePath("/drivers");
+  const { refresh } = useRevalidatePath("drivers");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleOpen = () => {

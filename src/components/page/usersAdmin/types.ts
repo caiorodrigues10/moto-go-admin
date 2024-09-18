@@ -1,10 +1,15 @@
+import { onlyLettersRegex } from "@/utils/Regex";
 import { validatePassword } from "@/utils/validatePassword";
 import { z } from "zod";
 
 export const createAdminSchema = z
   .object({
     name: z.string({ message: "Nome é obrigatório" }),
-    userName: z.string({ message: "Nome de usuário é obrigatório" }),
+    userName: z
+      .string({ message: "Nome de usuário é obrigatório" })
+      .refine((value) => onlyLettersRegex.test(value), {
+        message: "O nome de usuário deve conter apenas letras e números",
+      }),
     telephone: z.string({ message: "Telefone é obrigatório" }),
     password: z
       .string({
@@ -25,7 +30,12 @@ export type FormCreateAdminProps = z.infer<typeof createAdminSchema>;
 
 export const editAdminSchema = z.object({
   name: z.string({ message: "Nome é obrigatório" }),
-  userName: z.string().optional(),
+  userName: z
+    .string()
+    .min(1, "Nome é obrigatório")
+    .refine((value) => onlyLettersRegex.test(value), {
+      message: "O nome de usuário deve conter apenas letras e números",
+    }),
   telephone: z.string().optional(),
 });
 

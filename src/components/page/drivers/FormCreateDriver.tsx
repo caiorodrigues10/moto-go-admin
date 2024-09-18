@@ -27,7 +27,7 @@ export function FormCreateDriver() {
   const [photo, setPhoto] = useState("");
 
   const { push } = useRouter();
-  const { refresh } = useRevalidatePath("/drivers");
+  const { refresh } = useRevalidatePath("drivers");
 
   const onSubmit = useCallback(
     async (data: FormCreateDriverProps) => {

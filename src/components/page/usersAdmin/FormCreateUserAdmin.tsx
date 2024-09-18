@@ -30,7 +30,7 @@ export function FormCreateUserAdmin() {
     resolver: zodResolver(createAdminSchema),
   });
   const { push } = useRouter();
-  const { refresh } = useRevalidatePath("/adminUsers");
+  const { refresh } = useRevalidatePath("adminUsers");
 
   const onSubmit = useCallback(
     async (data: FormCreateAdminProps) => {

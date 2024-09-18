@@ -18,6 +18,7 @@ interface ICreateUserAdmin {
 
 interface IUpdateUserAdmin {
   name: string;
+  userName: string;
 }
 
 interface IUserAdminResponse extends AppResponse {

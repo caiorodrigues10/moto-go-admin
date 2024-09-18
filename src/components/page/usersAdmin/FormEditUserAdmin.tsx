@@ -25,7 +25,7 @@ export function FormEditUserAdmin({ user }: { user: IUserAdmin }) {
   const { addToast, removeToast } = useToast();
   const { push } = useRouter();
   const { setDataCookie } = PROVIDERS.cookies();
-  const { refresh } = useRevalidatePath("/adminUsers");
+  const { refresh } = useRevalidatePath("adminUsers");
 
   const { handleSubmit, setValue, control } = useForm<FormEditAdminProps>({
     resolver: zodResolver(editAdminSchema),
@@ -38,7 +38,7 @@ export function FormEditUserAdmin({ user }: { user: IUserAdmin }) {
 
   const onSubmit = useCallback(
     async (data: FormEditAdminProps) => {
-      const response = await updateUserAdmin({ name: data.name });
+      const response = await updateUserAdmin({ name: data.name, userName: data.userName });
 
       if (response?.result === "success") {
         addToast({
@@ -50,6 +50,12 @@ export function FormEditUserAdmin({ user }: { user: IUserAdmin }) {
           cookies: {
             path: "motogo.name",
             value: data.name,
+          },
+        });
+        setDataCookie({
+          cookies: {
+            path: "motogo.userName",
+            value: data.userName,
           },
         });
         refresh();
@@ -98,7 +104,6 @@ export function FormEditUserAdmin({ user }: { user: IUserAdmin }) {
               return (
                 <TextInput
                   type="text"
-                  isDisabled
                   placeholder="Digite o nome de usuário"
                   value={value}
                   label="Nome de usuário"

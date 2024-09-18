@@ -27,7 +27,7 @@ export default function ReactiveUser({
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { addToast, removeToast } = useToast();
   const { push } = useRouter();
-  const { refresh } = useRevalidatePath("/adminUsers");
+  const { refresh } = useRevalidatePath("adminUsers");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleOpen = () => {

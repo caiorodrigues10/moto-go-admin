@@ -1,7 +1,7 @@
 "use client";
 import { EmptyDataTable } from "@/components/EmptyDataTable";
 import { Pagination } from "@/components/Pagination";
-import { IUserAdminResponse } from "@/services/usersAdmin/types";
+import { IDriverResponse } from "@/services/drivers/types";
 import { cpfMask, phoneMask } from "@/utils/MaskProvider";
 import {
   Button,
@@ -18,15 +18,12 @@ import {
 import {
   Plus,
   UserCheck,
-  UserMinus,
-  UserRoundCheck,
-  UserRoundX,
+  UserMinus
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useCallback, useMemo } from "react";
 import InactiveUser from "./InactiveDrivers";
 import ReactiveUser from "./ReactiveDrivers";
-import { IDriverResponse } from "@/services/drivers/types";
 
 export function TableDrivers({
   drivers,

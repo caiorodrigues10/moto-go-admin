@@ -1,15 +1,15 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { revalidatePath } from 'next/cache'
+import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 
 export async function GET(
   request: NextRequest,
-  context: { params: { page: string; id: string } },
+  context: { params: { page: string; id: string } }
 ) {
   const path =
     request.nextUrl.searchParams.get(
-      context.params.page + '/' + context.params.id,
-    ) || '/'
+      context.params.page + "/" + context.params.id
+    ) || "/";
 
-  revalidatePath(path)
-  return NextResponse.json({ revalidated: true, now: Date.now() })
+  revalidatePath("/" + path);
+  return NextResponse.json({ revalidated: true, now: Date.now() });
 }

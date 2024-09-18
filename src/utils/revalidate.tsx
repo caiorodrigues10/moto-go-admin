@@ -1,19 +1,26 @@
-'use client'
+'use client';
 
-import { useRouter } from 'next/navigation'
-import { useCallback } from 'react'
+import { useRouter } from 'next/navigation';
+import { useCallback } from 'react';
 
 function useRevalidatePath(path: string) {
-  const { refresh: refreshRouter } = useRouter()
+  const { refresh: refreshRouter } = useRouter();
 
   const refresh = useCallback(async () => {
-    await fetch(`/api/revalidate?path=${path}`, {
-      method: 'GET',
-    })
-    refreshRouter()
-  }, [path, refreshRouter])
+    try {
+      const res = await fetch(`/api/revalidate/${path}`);
+      if (!res.ok) {
+        console.error('Failed to revalidate path:', res.statusText);
+        return;
+      }
+      console.log('Revalidation successful');
+      refreshRouter();
+    } catch (error) {
+      console.error('Error during revalidation:', error);
+    }
+  }, [path, refreshRouter]);
 
-  return { refresh }
+  return { refresh };
 }
 
-export { useRevalidatePath }
+export { useRevalidatePath };

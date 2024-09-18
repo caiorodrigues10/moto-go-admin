@@ -1,10 +1,9 @@
 "use client";
 import { EmptyDataTable } from "@/components/EmptyDataTable";
 import { Pagination } from "@/components/Pagination";
-import { IUserAdminResponse } from "@/services/usersAdmin/types";
+import { IUserResponse } from "@/services/users/types";
 import { phoneMask } from "@/utils/MaskProvider";
 import {
-  Button,
   Chip,
   Table,
   TableBody,
@@ -12,22 +11,19 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
-  Tooltip,
+  Tooltip
 } from "@nextui-org/react";
 import {
-  Plus,
   UserCheck,
   UserMinus,
   UserRoundCheck,
-  UserRoundX,
+  UserRoundX
 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useCallback, useMemo } from "react";
+import BlockUser from "./BlockUser";
 import InactiveUser from "./InactiveUser";
 import ReactiveUser from "./ReactiveUser";
-import { IUserResponse } from "@/services/users/types";
 import UnlockUser from "./UnlockUser";
-import BlockUser from "./BlockUser";
 
 export function TableUser({
   users,
@@ -39,7 +35,6 @@ export function TableUser({
     page?: number;
   };
 }) {
-  const { push } = useRouter();
 
   const columns = useMemo(
     () => [
@@ -181,7 +176,7 @@ export function TableUser({
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody items={users?.list} emptyContent={<EmptyDataTable />}>
+      <TableBody items={users?.list || []} emptyContent={<EmptyDataTable />}>
         {(item) =>
           item ? (
             <TableRow key={item.id}>
