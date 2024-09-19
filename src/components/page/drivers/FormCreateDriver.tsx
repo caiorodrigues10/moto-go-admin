@@ -103,8 +103,8 @@ export function FormCreateDriver() {
                 return (
                   <TextInput
                     type="text"
-                    placeholder="Digite o documento"
-                    label="Documento"
+                    placeholder="Digite o documento (CPF)"
+                    label="Documento (CPF)"
                     onChange={(e) => {
                       onChange(e);
                       setValue("document", cpfMask(e.target.value));

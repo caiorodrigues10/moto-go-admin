@@ -13,7 +13,6 @@ function useRevalidatePath(path: string) {
         console.error('Failed to revalidate path:', res.statusText);
         return;
       }
-      console.log('Revalidation successful');
       refreshRouter();
     } catch (error) {
       console.error('Error during revalidation:', error);
