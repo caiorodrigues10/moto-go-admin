@@ -32,6 +32,7 @@ export function NavBar() {
   }
 
   const menuItems = [
+    { name: "Dashboard", link: "/dashboard", action: () => {} },
     { name: "Administradores", link: "/adminUsers", action: () => {} },
     { name: "Usuários", link: "/users", action: () => {} },
     { name: "Motoristas", link: "/drivers", action: () => {} },

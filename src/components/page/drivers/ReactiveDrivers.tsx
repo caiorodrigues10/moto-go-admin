@@ -1,7 +1,6 @@
 import { useToast } from "@/context/ToastContext";
 import { reactiveDriver } from "@/services/drivers/client";
 import { IDriver } from "@/services/drivers/types";
-import { reactiveUserAdmin } from "@/services/usersAdmin/client";
 import { useRevalidatePath } from "@/utils/revalidate";
 import {
   Button,
@@ -12,7 +11,6 @@ import {
   ModalHeader,
   useDisclosure,
 } from "@nextui-org/react";
-import { useRouter } from "next/navigation";
 import { ReactNode, useCallback, useState } from "react";
 
 export default function ReactiveDriver({
@@ -24,7 +22,6 @@ export default function ReactiveDriver({
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { addToast, removeToast } = useToast();
-  const { push } = useRouter();
   const { refresh } = useRevalidatePath("adminUsers");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -56,7 +53,7 @@ export default function ReactiveDriver({
       });
     }
     setIsLoading(false);
-  }, [addToast, push, removeToast, driver, refresh, onClose]);
+  }, [addToast, removeToast, driver, refresh, onClose]);
 
   return (
     <>

@@ -134,7 +134,7 @@ export function TableUserAdmin({
         </Button>
       </div>
     );
-  }, []);
+  }, [push]);
 
   return (
     <Table

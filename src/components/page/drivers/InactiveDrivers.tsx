@@ -11,7 +11,6 @@ import {
   ModalHeader,
   useDisclosure,
 } from "@nextui-org/react";
-import { useRouter } from "next/navigation";
 import { ReactNode, useCallback, useState } from "react";
 
 export default function InactiveDriver({
@@ -23,7 +22,6 @@ export default function InactiveDriver({
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { addToast, removeToast } = useToast();
-  const { push } = useRouter();
   const { refresh } = useRevalidatePath("drivers");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -55,7 +53,7 @@ export default function InactiveDriver({
       });
     }
     setIsLoading(false);
-  }, [addToast, push, removeToast, driver, refresh, onClose]);
+  }, [addToast, removeToast, driver, refresh, onClose]);
 
   return (
     <>

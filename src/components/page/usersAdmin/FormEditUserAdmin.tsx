@@ -1,9 +1,11 @@
 "use client";
 import { TextInput } from "@/components/TextInput";
 import { useToast } from "@/context/ToastContext";
+import { PROVIDERS } from "@/providers";
 import { updateUserAdmin } from "@/services/usersAdmin/client";
 import { IUserAdmin } from "@/services/usersAdmin/types";
 import { phoneMask } from "@/utils/MaskProvider";
+import { useRevalidatePath } from "@/utils/revalidate";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Button,
@@ -18,8 +20,6 @@ import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { editAdminSchema, FormEditAdminProps } from "./types";
-import { PROVIDERS } from "@/providers";
-import { useRevalidatePath } from "@/utils/revalidate";
 
 export function FormEditUserAdmin({ user }: { user: IUserAdmin }) {
   const { addToast, removeToast } = useToast();
@@ -43,7 +43,9 @@ export function FormEditUserAdmin({ user }: { user: IUserAdmin }) {
       if (response?.result === "success") {
         addToast({
           type: "success",
-          message: response?.message || "Serviço indisponível tente novamente mais tarde",
+          message:
+            response?.message ||
+            "Serviço indisponível tente novamente mais tarde",
           onClose: removeToast,
         });
         setDataCookie({
@@ -64,12 +66,14 @@ export function FormEditUserAdmin({ user }: { user: IUserAdmin }) {
       } else {
         addToast({
           type: "error",
-          message: response?.message || "Serviço indisponível tente novamente mais tarde",
+          message:
+            response?.message ||
+            "Serviço indisponível tente novamente mais tarde",
           onClose: removeToast,
         });
       }
     },
-    [addToast, push, removeToast, user]
+    [addToast, push, removeToast, refresh, setDataCookie]
   );
 
   return (

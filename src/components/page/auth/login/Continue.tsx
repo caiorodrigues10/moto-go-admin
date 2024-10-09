@@ -25,7 +25,7 @@ export default function Continue({ name }: { name: string }) {
         <p className="text-zinc-400 mb-4">
           Aqui você pode continuar com a conta atual ou pode trocar de conta.
         </p>
-        <Button onClick={() => push("/adminUsers")} color="primary">
+        <Button onClick={() => push("/dashboard")} color="primary">
           Continuar como {name}
         </Button>
         <button

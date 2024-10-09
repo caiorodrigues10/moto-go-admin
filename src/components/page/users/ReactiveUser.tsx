@@ -1,8 +1,5 @@
 import { useToast } from "@/context/ToastContext";
-import {
-  inactiveUserAdmin,
-  reactiveUserAdmin,
-} from "@/services/usersAdmin/client";
+import { reactiveUserAdmin } from "@/services/usersAdmin/client";
 import { IUserAdmin } from "@/services/usersAdmin/types";
 import { useRevalidatePath } from "@/utils/revalidate";
 import {
@@ -14,7 +11,6 @@ import {
   ModalHeader,
   useDisclosure,
 } from "@nextui-org/react";
-import { useRouter } from "next/navigation";
 import { ReactNode, useCallback, useState } from "react";
 
 export default function ReactiveUser({
@@ -26,7 +22,6 @@ export default function ReactiveUser({
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { addToast, removeToast } = useToast();
-  const { push } = useRouter();
   const { refresh } = useRevalidatePath("adminUsers");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -41,7 +36,9 @@ export default function ReactiveUser({
     if (response?.result === "success") {
       addToast({
         type: "success",
-        message: response?.message || "Serviço indisponível tente novamente mais tarde",
+        message:
+          response?.message ||
+          "Serviço indisponível tente novamente mais tarde",
         onClose: removeToast,
       });
       refresh();
@@ -49,12 +46,14 @@ export default function ReactiveUser({
     } else {
       addToast({
         type: "error",
-        message: response?.message || "Serviço indisponível tente novamente mais tarde",
+        message:
+          response?.message ||
+          "Serviço indisponível tente novamente mais tarde",
         onClose: removeToast,
       });
     }
     setIsLoading(false);
-  }, [addToast, push, removeToast, user, refresh, onClose]);
+  }, [addToast, removeToast, user, refresh, onClose]);
 
   return (
     <>

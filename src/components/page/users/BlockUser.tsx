@@ -1,7 +1,6 @@
 import { useToast } from "@/context/ToastContext";
 import { IUser } from "@/services/users/types";
 import { inactiveUserAdmin } from "@/services/usersAdmin/client";
-import { IUserAdmin } from "@/services/usersAdmin/types";
 import { useRevalidatePath } from "@/utils/revalidate";
 import {
   Button,
@@ -12,7 +11,6 @@ import {
   ModalHeader,
   useDisclosure,
 } from "@nextui-org/react";
-import { useRouter } from "next/navigation";
 import { ReactNode, useCallback, useState } from "react";
 
 export default function BlockUser({
@@ -24,7 +22,6 @@ export default function BlockUser({
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { addToast, removeToast } = useToast();
-  const { push } = useRouter();
   const { refresh } = useRevalidatePath("users");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -39,7 +36,9 @@ export default function BlockUser({
     if (response?.result === "success") {
       addToast({
         type: "success",
-        message: response?.message || "Serviço indisponível tente novamente mais tarde",
+        message:
+          response?.message ||
+          "Serviço indisponível tente novamente mais tarde",
         onClose: removeToast,
       });
       refresh();
@@ -47,12 +46,14 @@ export default function BlockUser({
     } else {
       addToast({
         type: "error",
-        message: response?.message || "Serviço indisponível tente novamente mais tarde",
+        message:
+          response?.message ||
+          "Serviço indisponível tente novamente mais tarde",
         onClose: removeToast,
       });
     }
     setIsLoading(false);
-  }, [addToast, push, removeToast, user, refresh, onClose]);
+  }, [addToast, removeToast, user, refresh, onClose]);
 
   return (
     <>

@@ -15,7 +15,8 @@ export default async function middleware(request: NextRequest) {
         response.cookies.set(`motogo.${cookieName}`, "", {
           expires: new Date(0),
           path: "/",
-        });3
+        });
+        3;
       });
 
       return response;
@@ -28,5 +29,11 @@ export default async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/adminUsers/:path*"],
+  matcher: [
+    "/",
+    "/adminUsers/:path*",
+    "/dashboard/:path*",
+    "/drivers/:path*",
+    "/users/:path*",
+  ],
 };

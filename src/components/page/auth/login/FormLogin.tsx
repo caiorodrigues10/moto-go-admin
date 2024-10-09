@@ -27,13 +27,15 @@ export default function FormLogin() {
 
   const onSubmit = useCallback(
     async (data: LoginAdminProps) => {
-      setIsLoading(true)
+      setIsLoading(true);
       const response = await login(data);
 
       if (response?.result === "success") {
         addToast({
           type: "success",
-          message: response?.message || "Serviço indisponível tente novamente mais tarde",
+          message:
+            response?.message ||
+            "Serviço indisponível tente novamente mais tarde",
           onClose: removeToast,
         });
         setCookies({
@@ -44,17 +46,19 @@ export default function FormLogin() {
             id: String(response.data?.user.id),
           },
         });
-        push("/adminUsers");
+        push("/dashboard");
       } else {
         addToast({
           type: "error",
-          message: response?.message || "Serviço indisponível tente novamente mais tarde",
+          message:
+            response?.message ||
+            "Serviço indisponível tente novamente mais tarde",
           onClose: removeToast,
         });
       }
-      setIsLoading(false)
+      setIsLoading(false);
     },
-    [addToast, push, removeToast]
+    [addToast, push, removeToast, setCookies]
   );
 
   return (

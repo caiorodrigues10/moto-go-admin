@@ -11,7 +11,6 @@ import {
   ModalHeader,
   useDisclosure,
 } from "@nextui-org/react";
-import { useRouter } from "next/navigation";
 import { ReactNode, useCallback, useState } from "react";
 
 export default function InactiveUser({
@@ -23,7 +22,6 @@ export default function InactiveUser({
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { addToast, removeToast } = useToast();
-  const { push } = useRouter();
   const { refresh } = useRevalidatePath("adminUsers");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -38,7 +36,9 @@ export default function InactiveUser({
     if (response?.result === "success") {
       addToast({
         type: "success",
-        message: response?.message || "Serviço indisponível tente novamente mais tarde",
+        message:
+          response?.message ||
+          "Serviço indisponível tente novamente mais tarde",
         onClose: removeToast,
       });
       refresh();
@@ -46,12 +46,14 @@ export default function InactiveUser({
     } else {
       addToast({
         type: "error",
-        message: response?.message || "Serviço indisponível tente novamente mais tarde",
+        message:
+          response?.message ||
+          "Serviço indisponível tente novamente mais tarde",
         onClose: removeToast,
       });
     }
     setIsLoading(false);
-  }, [addToast, push, removeToast, user, refresh, onClose]);
+  }, [addToast, removeToast, user, refresh, onClose]);
 
   return (
     <>

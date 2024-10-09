@@ -154,7 +154,7 @@ export function TableDrivers({
         </Button>
       </div>
     );
-  }, []);
+  }, [push]);
 
   return (
     <Table
